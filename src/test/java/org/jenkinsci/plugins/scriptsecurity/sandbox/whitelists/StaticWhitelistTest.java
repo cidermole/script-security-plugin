@@ -96,13 +96,20 @@ public class StaticWhitelistTest {
         Assert.assertFalse("Whitelist is out of order!  Please see issues above.", isUnsorted);
 
 
+	boolean anyFailed = false;
         for (EnumeratingWhitelist.Signature sig : sigs) {
             try {
-                assertTrue(sig + " does not exist (or is an override)", sig.exists());
+                //assertTrue(sig + " does not exist (or is an override)", sig.exists());
+		if(!sig.exists()) {
+		    System.out.println(sig + " - signature does not exist, or is an override");
+		    anyFailed = true;
+		}
+                //assertTrue(sig + " does not exist (or is an override)", sig.exists());
             } catch (ClassNotFoundException x) {
                 System.err.println("Cannot check validity of `" + sig + "` due to " + x);
             }
         }
+        assertFalse("some signatures do not exist (or are an override)", anyFailed);
     }
 
     @Test public void sanity() throws Exception {
